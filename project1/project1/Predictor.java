@@ -1,3 +1,5 @@
+//Aidan Robertson
+//OOP Project 1
 package project1;
 
 import java.io.BufferedReader;
@@ -17,7 +19,8 @@ public class Predictor {
 		fn = file;
 		readFile();
 	}
-
+	
+	//private method to read data from passed filename and path, this is called in constructor
 	private void readFile() {
 		BufferedReader lineReader = null;
 		try {
@@ -33,12 +36,12 @@ public class Predictor {
 			System.err.println("there was a problem with the file reader, try different read type.");				
 		}
 	}
-	
+
 	//public wrapper for writeFile
 	public void saveFile() {
 		writeFile(this.fn);
 	}
-	
+
 	//prints this objects to string into the file is initially read from
 	private void writeFile(String fn) {
 		FileWriter fw;
@@ -50,18 +53,48 @@ public class Predictor {
 			myOutFile.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("***There was an error reading the inputted file***!");
 			e.printStackTrace();
 		}		
 	}
-	
-	public void add(Instance instance) {
+
+	public String using(Instance newInstance) {
+		Instance match = null;
+		int highestScore = 0;
+		String activityToReturn = "";
+		
+		for (Instance instance : instances) {
+			if (instance.score(newInstance) >= highestScore) {
+				highestScore = instance.score(newInstance); // generate score for each instance in our data
+				match = instance;
+			}
+		}
+		if (highestScore == 0) { // if nothing similar could be found, default to take a nap
+			activityToReturn = "take a nap";
+		}
+		else {
+			activityToReturn = match.getActivity();
+		}
+		
+		return activityToReturn;
+	}
+
+	public void add(Instance newInstance) {
 		try {
-			instances.add(instance);
+			boolean existsInData = false;
+			for (Instance instance : instances) {
+				if (instance.equals(newInstance)) { //if instance we are trying to add already exists
+					existsInData = true; //
+				}	
+			}
+			if (!existsInData) { // if new instance is not in data already, add it
+				instances.add(newInstance);	
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String toString() {
 		String toReturn = "";
 		for (Instance instance : instances) {

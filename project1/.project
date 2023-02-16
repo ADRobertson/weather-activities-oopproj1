@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>project1/weather.numeric.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/weather.numeric.txt</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
