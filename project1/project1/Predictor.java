@@ -42,7 +42,7 @@ public class Predictor {
 		writeFile(this.fn);
 	}
 
-	//prints this objects to string into the file is initially read from
+	//prints instances objects to string into the file is initially read from
 	private void writeFile(String fn) {
 		FileWriter fw;
 		try {
@@ -53,48 +53,55 @@ public class Predictor {
 			myOutFile.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			System.out.println("***There was an error reading the inputted file***!");
+			System.out.println("***There was an error writting the file***!");
 			e.printStackTrace();
 		}		
 	}
-
+	
+	
+	//  queries instances in arrayList and returns what it thinks would be a good activity for today given an instance of weather conditions (using score method from Instance class)
 	public String using(Instance newInstance) {
 		Instance match = null;
 		int highestScore = 0;
 		String activityToReturn = "";
 		
 		for (Instance instance : instances) {
-			if (instance.score(newInstance) >= highestScore) {
-				highestScore = instance.score(newInstance); // generate score for each instance in our data
-				match = instance;
+			if (instance.score(newInstance) >= highestScore) { // if an instance was closer to the weather than any previous one
+				highestScore = instance.score(newInstance); // change highest score to this value
+				match = instance; // set match variable to instance object that was closest
 			}
 		}
 		if (highestScore == 0) { // if nothing similar could be found, default to take a nap
 			activityToReturn = "take a nap";
 		}
 		else {
-			activityToReturn = match.getActivity();
+			activityToReturn = match.getActivity(); // grab activity of closest matching instance
 		}
 		
 		return activityToReturn;
 	}
-
-	public void add(Instance newInstance) {
-		try {
-			boolean existsInData = false;
-			for (Instance instance : instances) {
-				if (instance.equals(newInstance)) { //if instance we are trying to add already exists
-					existsInData = true; //
-				}	
+	
+	// wrapper function for adding new Instance to arrayList
+	private void add(Instance newInstance) {
+		instances.add(newInstance);
+	}
+	
+	// is passed a new Instance - if the exact weather conditions are already in the arrayList, update the activity
+	// if not, add the new weather Instance to the arrayList
+	public void updating(Instance newInstance) {
+		boolean update = false;
+		for (Instance instance : instances) {
+			if (instance.equals(newInstance)) { // if it finds a weather match, change the activity
+					update = true; // will be used to check if the we need to add a new record later in this method
+					instance.setActivity(newInstance.getActivity());
 			}
-			if (!existsInData) { // if new instance is not in data already, add it
-				instances.add(newInstance);	
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+		if (!update) {
+			add(newInstance); // if there isn't a weather match in the data, add a new instance to the ArrayList
 		}
 	}
-
+	
+	//toString - just uses the Instance class toString to print all weather/activity instances
 	public String toString() {
 		String toReturn = "";
 		for (Instance instance : instances) {

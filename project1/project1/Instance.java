@@ -36,6 +36,7 @@ public class Instance {
 		setActivity("none");
 	}
 	
+	// used to determine which would be the closest match to a given instance (used in using method of Predictor class)
 	public int score(Instance newInstance) {
 		int returnScore = 0;
 		if (this.equals(newInstance)) { //if the weather is equal set score to 4 (max)
@@ -58,6 +59,7 @@ public class Instance {
 		return returnScore;
 	}
 
+		//self explanatory getters and setters for this class below
 	public int getTemperature() {
 		return temperature;
 	}
@@ -98,6 +100,7 @@ public class Instance {
 		this.conditions = conditions;
 	}
 	
+	//very important equals method
 	public boolean equals(Instance rhs) {
 		if (temperature == rhs.getTemperature() && humidity == rhs.getHumidity() && windy.equals(rhs.getWindy()) && conditions.equals(rhs.getConditions())) {
 			return true;
